@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MyLocalLLM</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>MyLocalLLM</h1>
+      <div class="row">
+        <select id="model-select" aria-label="Modelo"></select>
+        <button id="reload-btn" type="button" title="Carregar modelo selecionado">⟳</button>
+      </div>
+    </header>
+
+    <div id="gpu-warning" class="warning hidden"></div>
+
+    <div id="progress" class="progress">Aguardando inicialização…</div>
+
+    <main id="chat" class="chat" aria-live="polite"></main>
+
+    <form id="chat-form" class="composer">
+      <textarea
+        id="prompt"
+        rows="2"
+        placeholder="Digite sua mensagem… (Enter envia, Shift+Enter quebra linha)"
+        autofocus
+      ></textarea>
+      <div class="row">
+        <button id="send-btn" type="submit">Enviar</button>
+        <button id="stop-btn" type="button" disabled>Parar</button>
+        <button id="clear-btn" type="button">Limpar</button>
+      </div>
+    </form>
+
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>
