@@ -1,6 +1,6 @@
 {
   "name": "chrome-llm",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Chrome MV3 extension running a 100% local LLM in the browser via WebLLM + WebGPU.",
   "private": true,
   "license": "MIT",
