@@ -28,10 +28,10 @@ if [ "$push_to_main" -eq 0 ]; then
   exit 0
 fi
 
-# Evita loop: se o último commit já é um release-bump, deixa passar
-last_msg=$(git log -1 --pretty=%B)
-case "$last_msg" in
-  *"chore(release):"*)
+# Evita loop: se o subject do último commit já é um release-bump, deixa passar
+last_subject=$(git log -1 --pretty=%s)
+case "$last_subject" in
+  "chore(release):"*)
     echo "↳ último commit já é release-bump, push prossegue normalmente."
     exit 0
     ;;
