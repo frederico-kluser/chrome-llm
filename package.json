@@ -3,12 +3,34 @@
   "version": "0.1.0",
   "description": "Chrome MV3 extension running a 100% local LLM in the browser via WebLLM + WebGPU.",
   "private": true,
+  "license": "MIT",
+  "author": "frederico-kluser",
+  "homepage": "https://github.com/frederico-kluser/chrome-llm#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frederico-kluser/chrome-llm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frederico-kluser/chrome-llm/issues"
+  },
+  "keywords": [
+    "chrome-extension",
+    "manifest-v3",
+    "llm",
+    "webllm",
+    "webgpu",
+    "local-llm",
+    "llama",
+    "on-device-ai",
+    "privacy"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.79"
@@ -17,6 +39,7 @@
     "@crxjs/vite-plugin": "^2.0.0-beta.25",
     "@types/chrome": "^0.0.270",
     "@webgpu/types": "^0.1.70",
+    "husky": "^9.1.7",
     "typescript": "^5.5.4",
     "vite": "^5.4.8"
   }

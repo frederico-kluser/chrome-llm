@@ -1,0 +1,63 @@
+#!/usr/bin/env sh
+# Pre-push hook: ao fazer push em `main`, faz bump patch automaticamente,
+# cria tag e re-push com o novo commit + tag.
+#
+# Para pular este hook em casos especiais: HUSKY=0 git push
+
+# Evita recursão (este hook se auto-invoca após o bump)
+[ -n "$SKIP_VERSION_BUMP" ] && exit 0
+
+remote="$1"
+
+protected_branch='main'
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "")
+
+if [ "$current_branch" != "$protected_branch" ]; then
+  exit 0
+fi
+
+# Confirma que estamos realmente pushing main
+push_to_main=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    push_to_main=1
+  fi
+done
+
+if [ "$push_to_main" -eq 0 ]; then
+  exit 0
+fi
+
+# Evita loop: se o último commit já é um release-bump, deixa passar
+last_msg=$(git log -1 --pretty=%B)
+case "$last_msg" in
+  *"chore(release):"*)
+    echo "↳ último commit já é release-bump, push prossegue normalmente."
+    exit 0
+    ;;
+esac
+
+# Working tree deve estar limpo para o bump
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "✖ pre-push: working tree sujo. Faça commit das alterações antes do push para main."
+  exit 1
+fi
+
+echo "▶ pre-push: bumping patch version antes do push em main..."
+npm version patch -m "chore(release): v%s [skip ci]" >/dev/null || {
+  echo "✖ pre-push: falha ao executar 'npm version patch'."
+  exit 1
+}
+
+new_version=$(node -p "require('./package.json').version")
+echo "✔ bump para v$new_version. Re-enviando com tag..."
+
+# Re-push pulando este hook para não recursar
+SKIP_VERSION_BUMP=1 git push --follow-tags "$remote" "$current_branch" || {
+  echo "✖ pre-push: falha ao re-pushar v$new_version."
+  exit 1
+}
+
+# Aborta o push original (já enviamos a versão nova acima)
+echo "✔ v$new_version publicada. Abortando push original (já enviado)."
+exit 1

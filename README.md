@@ -132,6 +132,16 @@ Normal — o histórico fica em `chrome.storage.local` e é recarregado, mas o e
 
 Verifique antes de uso comercial.
 
+## Versionamento automático (Husky)
+
+Todo `git push` para a branch `main` aciona um hook `pre-push` que:
+
+1. Executa `npm version patch` (incrementa o patch e cria commit + tag `vX.Y.Z`).
+2. Faz o push do commit + tag com `--follow-tags`.
+3. Aborta o push original (já enviou o novo conteúdo).
+
+Para pular o bump (ex.: docs apenas, correção urgente): `HUSKY=0 git push` ou faça o commit com mensagem começando por `chore(release):` (o hook detecta e ignora).
+
 ## Licença do código
 
 MIT — veja `LICENSE`.
